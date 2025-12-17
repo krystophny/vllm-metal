@@ -51,6 +51,10 @@ get_repo_root() {
   git rev-parse --show-toplevel
 }
 
+uv_pip_install_pytorch() {
+  USE_CUDA=0 USE_CUDNN=0 USE_ROCM=0 USE_MPS=1 uv pip install "$pytorch_dir"
+}
+
 # Install PyTorch from submodule
 install_pytorch_from_submodule() {
   local repo_root
@@ -64,7 +68,7 @@ install_pytorch_from_submodule() {
   fi
 
   section "Installing PyTorch from submodule"
-  if ! uv pip install "$pytorch_dir"; then
+  if ! uv_pip_install_pytorch; then
     error "Failed to install PyTorch from submodule"
     return 1
   fi
