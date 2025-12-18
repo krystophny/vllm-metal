@@ -5,10 +5,7 @@ import pytest
 import torch
 from torch.nn import functional
 
-from vllm_metal.attention.backend import (
-    MetalAttentionBackend,
-    MetalAttentionMetadata,
-)
+from vllm_metal.attention.backend import MetalAttentionBackend, MetalAttentionMetadata
 from vllm_metal.attention.metal_attention import MetalAttentionImpl
 
 
