@@ -118,7 +118,9 @@ class MetalModelRunner:
             or num_attention_heads
         )
         hidden_size = self.model_args.get("hidden_size") or 4096
-        head_size = self.model_args.get("head_dim") or (hidden_size // num_attention_heads)
+        head_size = self.model_args.get("head_dim") or (
+            hidden_size // num_attention_heads
+        )
         block_size = self.metal_config.block_size
 
         # Create a spec for each layer
@@ -163,7 +165,9 @@ class MetalModelRunner:
             or num_attention_heads
         )
         hidden_size = self.model_args.get("hidden_size") or 4096
-        head_dim = self.model_args.get("head_dim") or (hidden_size // num_attention_heads)
+        head_dim = self.model_args.get("head_dim") or (
+            hidden_size // num_attention_heads
+        )
         block_size = self.metal_config.block_size
 
         # Each block stores key and value for all layers
