@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
 
 [project]
 name = "vllm-metal"
@@ -13,7 +13,7 @@ requires-python = ">=3.12,<3.14"
 authors = [
     {name = "vLLM Community"}
 ]
-keywords = ["vllm", "metal", "mlx", "apple", "silicon", "mps", "llm", "inference"]
+keywords = ["vllm", "metal", "mlx", "apple", "silicon", "mps", "llm", "inference", "rust"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -22,6 +22,7 @@ classifiers = [
     "Operating System :: MacOS :: MacOS X",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Rust",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
@@ -69,14 +70,21 @@ metal = "vllm_metal:register"
 [project.entry-points."vllm.general_plugins"]
 metal_ops = "vllm_metal:register_ops"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["vllm_metal*"]
+# Maturin configuration for mixed Rust/Python project
+[tool.maturin]
+# Build both the Rust extension and include Python source
+features = ["pyo3/extension-module"]
+# Include Python package in the wheel
+python-source = "."
+# Module name matches the Rust crate name
+module-name = "vllm_metal._rs"
+# Strip symbols for smaller binary
+strip = true
 
 [tool.ruff]
 line-length = 88
 target-version = "py312"
-exclude = ["extern", ".venv*", "test_vllm.py"]
+exclude = ["extern", ".venv*", "test_vllm.py", "target"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]

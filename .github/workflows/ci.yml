@@ -21,9 +21,9 @@ jobs:
       with:
         submodules: recursive
 
-    - name: CI
+    - name: Lint
       run: |
-        scripts/ci.sh
+        scripts/lint.sh
 
   test:
     runs-on: ${{ matrix.os }}
@@ -39,6 +39,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: CI
+    - name: Test
       run: |
         scripts/test.sh

@@ -5,12 +5,42 @@ This plugin enables vLLM to run on Apple Silicon Macs using MLX as the
 primary compute backend, with PyTorch for model loading and interoperability.
 """
 
-from vllm_metal.config import MetalConfig, get_config, reset_config
-from vllm_metal.model_runner import MetalModelRunner
-from vllm_metal.platform import MetalPlatform
-from vllm_metal.worker import MetalWorker
-
 __version__ = "0.1.0"
+
+
+# Lazy imports to avoid loading vLLM dependencies when just importing the Rust extension
+def __getattr__(name):
+    """Lazy import module components."""
+    if name == "MetalConfig":
+        from vllm_metal.config import MetalConfig
+
+        return MetalConfig
+    elif name == "get_config":
+        from vllm_metal.config import get_config
+
+        return get_config
+    elif name == "reset_config":
+        from vllm_metal.config import reset_config
+
+        return reset_config
+    elif name == "MetalModelRunner":
+        from vllm_metal.model_runner import MetalModelRunner
+
+        return MetalModelRunner
+    elif name == "MetalPlatform":
+        from vllm_metal.platform import MetalPlatform
+
+        return MetalPlatform
+    elif name == "MetalWorker":
+        from vllm_metal.worker import MetalWorker
+
+        return MetalWorker
+    elif name == "register":
+        return _register
+    elif name == "register_ops":
+        return _register_ops
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 __all__ = [
     "MetalConfig",
@@ -24,7 +54,7 @@ __all__ = [
 ]
 
 
-def register() -> str | None:
+def _register() -> str | None:
     """Register the Metal platform plugin with vLLM.
 
     This is the entry point for vLLM's platform plugin system.
@@ -32,12 +62,14 @@ def register() -> str | None:
     Returns:
         Fully qualified class name if platform is available, None otherwise
     """
+    from vllm_metal.platform import MetalPlatform
+
     if MetalPlatform.is_available():
         return "vllm_metal.platform.MetalPlatform"
     return None
 
 
-def register_ops() -> None:
+def _register_ops() -> None:
     """Register Metal operations with vLLM.
 
     This is the entry point for vLLM's general plugin system.

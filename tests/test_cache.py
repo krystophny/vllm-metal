@@ -136,7 +136,7 @@ class TestPagedKVCache:
 
         assert len(blocks) == 3
         assert cache.num_free_blocks == 7
-        assert 0 in cache.sequence_blocks
+        assert cache.has_sequence(0)
 
     def test_block_allocation_insufficient(self) -> None:
         """Test block allocation with insufficient blocks."""
@@ -172,8 +172,8 @@ class TestPagedKVCache:
         cache.free_sequence(seq_id=0)
 
         assert cache.num_free_blocks == 8
-        assert 0 not in cache.sequence_blocks
-        assert 1 in cache.sequence_blocks
+        assert not cache.has_sequence(0)
+        assert cache.has_sequence(1)
 
     def test_block_update(self) -> None:
         """Test updating block contents."""
