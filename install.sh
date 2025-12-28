@@ -116,7 +116,7 @@ main() {
     exit 1
   fi
 
-  local venv="$HOME/.venv-vllm-metal"
+  local venv="/usr/local/bin/.venv-vllm-metal"
   if [[ -n "$local_lib" && -f "$local_lib" ]]; then
     venv="$PWD/.venv-vllm-metal"
   fi
@@ -149,16 +149,12 @@ main() {
     fi
 
     download_and_install_wheel "$wheel_url" "$package_name"
+    cd /usr/local/bin
+    ln -s .venv-vllm-metal/bin/vllm .
   fi
 
   echo ""
   success "Installation complete!"
-  echo ""
-  echo "To use vllm, activate the virtual environment:"
-  echo "  source $venv/bin/activate"
-  echo ""
-  echo "Or add the venv to your PATH:"
-  echo "  export PATH=\"$venv/bin:\$PATH\""
 }
 
 main "$@"
