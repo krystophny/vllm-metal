@@ -48,7 +48,7 @@ dependencies = [
 vllm-metal = "vllm_metal.server:main"
 
 [project.optional-dependencies]
-vllm = ["vllm>=0.13.0"]
+vllm = ["vllm>=0.14.0"]
 dev = [
     "pytest>=9.0.2",
     "pytest-asyncio>=0.21.0",
