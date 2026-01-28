@@ -151,6 +151,14 @@ main() {
     download_and_install_wheel "$wheel_url" "$package_name"
   fi
 
+  # Install Python sources from fork to get vLLM 0.14.x API fixes
+  # The wheel from upstream has Rust extension but outdated Python code
+  local fork_repo="${VLLM_METAL_FORK_REPO:-krystophny/vllm-metal}"
+  local fork_branch="${VLLM_METAL_FORK_BRANCH:-fix-transformers-5-compat}"
+  echo "Installing Python sources from fork (${fork_repo}@${fork_branch})..."
+  uv pip install "git+https://github.com/${fork_repo}.git@${fork_branch}#egg=vllm-metal" \
+    --reinstall-package vllm-metal --no-build-isolation --python "$venv/bin/python"
+
   echo ""
   success "Installation complete!"
   echo ""
