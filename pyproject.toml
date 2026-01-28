@@ -36,7 +36,7 @@ dependencies = [
     "accelerate>=0.26.0",
     "safetensors>=0.4.0",
     # Core utilities
-    "numpy>=1.24.0",
+    "numpy>=1.24.0,<2.3",  # Numba requires NumPy < 2.3
     "psutil>=5.9.0",
     # Server dependencies
     "fastapi>=0.100.0",
